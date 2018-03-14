@@ -2,8 +2,10 @@
 
 require "conflow_spec/version"
 require "conflow"
+require "rspec"
 
 require "conflow_spec/test_flow"
+require "conflow_spec/flow_context"
 
 # ConflowSpec defines sets of contexts and matchers to easily and responsibly test your Conflow flows.
 module ConflowSpec
