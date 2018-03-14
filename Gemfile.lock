@@ -3,6 +3,7 @@ PATH
   specs:
     conflow_spec (0.1.0)
       conflow (~> 0.2)
+      rspec (~> 3.0)
 
 GEM
   remote: https://rubygems.org/
