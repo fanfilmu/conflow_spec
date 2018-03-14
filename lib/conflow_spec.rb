@@ -7,6 +7,8 @@ require "rspec"
 require "conflow_spec/test_flow"
 require "conflow_spec/flow_context"
 require "conflow_spec/runner"
+require "conflow_spec/matchers/run_job"
+require "conflow_spec/matchers"
 
 # ConflowSpec defines sets of contexts and matchers to easily and responsibly test your Conflow flows.
 module ConflowSpec
