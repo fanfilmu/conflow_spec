@@ -1,5 +1,7 @@
 # ConflowSpec
 
+[![Build Status](https://travis-ci.org/fanfilmu/conflow_spec.svg?branch=master)](https://travis-ci.org/fanfilmu/conflow_spec) [![Maintainability](https://api.codeclimate.com/v1/badges/0518fa4b23e959ff779c/maintainability)](https://codeclimate.com/github/fanfilmu/conflow_spec/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/0518fa4b23e959ff779c/test_coverage)](https://codeclimate.com/github/fanfilmu/conflow_spec/test_coverage)
+
 ConflowSpec defines sets of contexts and matchers to easily and responsibly test your [Conflow](https://github.com/fanfilmu/conflow) flows.
 
 ## Installation
@@ -7,7 +9,7 @@ ConflowSpec defines sets of contexts and matchers to easily and responsibly test
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "conflow_spec"
+gem "conflow_spec", group: :test
 ```
 
 And then execute:
@@ -20,7 +22,30 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+`ConflowSpec` automatically integrates with RSpec. Tag your specs describing `Conflow::Flow` classes with `conflow: true` metadata.
+
+Note that the jobs will not enqueue using your `#queue` method - so you are still responsible for testing this method on your own.
+
+```ruby
+RSpec.describe MyFlow do
+  describe ".create", conflow: true do
+    subject { described_class.create(id: 115) }
+
+    before { allow_job(DataFetcher, id: 115).to produce([{ type: "User", id: 93 }, { type: "Admin", id: 13 }]) }
+
+    it { is_expected.to run_job(DataFetcher).with_params(id: 115) }
+
+    it { is_expected.to run_job(AdminNotification).with_params(id: 13) }
+    it { is_expected.to_not run_job(AdminNotification).with_params(id: 93) }
+  end
+
+  describe "#queue" do
+    # test your queue method (without conflow: true tag!)
+  end
+end
+```
+
+`run_job` checks if a job of given class was enqueued in the flow. To test hooks, use `allow_job` method - it will stub result of job processing.
 
 ## Development
 
