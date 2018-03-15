@@ -13,3 +13,8 @@ require "conflow_spec/matchers"
 # ConflowSpec defines sets of contexts and matchers to easily and responsibly test your Conflow flows.
 module ConflowSpec
 end
+
+RSpec.configure do |config|
+  config.include ConflowSpec::FlowContext, conflow: true
+  config.include ConflowSpec::Matchers, conflow: true
+end
