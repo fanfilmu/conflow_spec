@@ -26,5 +26,17 @@ RSpec.describe ConflowSpec::Runner do
     end
 
     it { expect { subject }.to change { runner.performed_jobs }.to eq expected_order }
+
+    context "when flow has some return values defined" do
+      before do
+        flow._conflow_spec_returns << double(job_class: Proc, params: { name: "with hook" }, result: :ok)
+        flow.run Proc, params: { name: "with hook" }, hook: :verify_result
+      end
+
+      it "runs hook with proper result" do
+        expect(flow).to receive(:verify_result).with(:ok)
+        subject
+      end
+    end
   end
 end

@@ -34,5 +34,11 @@ module ConflowSpec
     def queue(job)
       self.class.queue << job
     end
+
+    # Set of return values of jobs
+    # @api private
+    def _conflow_spec_returns
+      @_conflow_spec_returns ||= Set.new
+    end
   end
 end

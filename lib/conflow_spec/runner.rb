@@ -21,11 +21,18 @@ module ConflowSpec
 
     def finish(job)
       performed_jobs << [job.worker_type, job.params.to_h]
-      flow.finish(job)
+      flow.finish(job, fetch_result(job))
     end
 
     def queue
       flow.class.queue
+    end
+
+    def fetch_result(job)
+      matching_by_class = flow._conflow_spec_returns.select { |struct| struct.job_class == job.worker_type }
+      matching_by_params = matching_by_class.select { |struct| struct.params == job.params.to_h }
+
+      (matching_by_params.first || matching_by_class.first)&.result
     end
   end
 end
