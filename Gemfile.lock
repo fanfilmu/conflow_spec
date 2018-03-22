@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    conflow_spec (0.1.0)
+    conflow_spec (0.2.0)
       conflow (~> 0.4)
       rspec (~> 3.0)
 
