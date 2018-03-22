@@ -3,6 +3,8 @@
 module ConflowSpec
   # Runs the flow and collects informations about it
   class Runner
+    include Conflow::Worker
+
     attr_reader :flow, :performed_jobs
 
     # @param flow [Conflow::Flow] instance of the flow
@@ -14,15 +16,17 @@ module ConflowSpec
 
     # Performs all jobs in the flow, saving results in {performed_jobs}
     def run
-      finish(queue.pop) until queue.empty?
+      until queue.empty?
+        job = queue.pop
+
+        perform(flow.id, job.id) do |worker_type, params|
+          performed_jobs << [worker_type, params.to_h]
+          fetch_result(job)
+        end
+      end
     end
 
     private
-
-    def finish(job)
-      performed_jobs << [job.worker_type, job.params.to_h]
-      flow.finish(job, fetch_result(job))
-    end
 
     def queue
       flow.class.queue

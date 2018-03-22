@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.files = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^spec/}) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "conflow", "~> 0.3"
+  spec.add_dependency "conflow", "~> 0.4"
   spec.add_dependency "rspec", "~> 3.0"
 
   spec.add_development_dependency "bundler", "~> 1.16"
